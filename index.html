@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plant Disease Scanner</title>
+</head>
+<body>
+  <h1>Upload Leaf Image</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" id="fileInput" required><br><br>
+    <button type="submit">Scan Disease</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('uploadForm').onsubmit = async function(event) {
+      event.preventDefault();
+      const file = document.getElementById('fileInput').files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch('/predict', { method: 'POST', body: formData });
+      const result = await response.json();
+      document.getElementById('result').innerText = 
+        `Predicted: ${result.predicted_class}, Confidence: ${result.confidence.toFixed(2)}`;
+    };
+  </script>
+</body>
+</html>
